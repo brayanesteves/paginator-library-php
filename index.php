@@ -9,8 +9,9 @@
     } else {
         $page = false;
     }
-    $users = $paginator->paginate("SELECT * FROM `0_Usrs`", $page);
+    $users  = $paginator->paginate("SELECT * FROM `0_Usrs`", $page);
     $params = $paginator->getPagination();
+    $paramsRange = $paginator->getRangePagination();
 
     require_once 'views/index/index.phtml';
 

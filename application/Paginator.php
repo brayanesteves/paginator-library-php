@@ -84,6 +84,66 @@
             return $this->_data;
         }
 
+        public function getRangePagination($limit = false) {
+            if($limit && is_numeric($limit)) {
+                $limit = $limit;
+            } else {
+                $limit = 10;
+            }
+
+            $totalPages    = $this->_pagination['total'];
+            $selectedPages = $this->_pagination['current'];
+            $range         = ceil($limit / 2);
+            $pages         = array();
+            /**
+             * Range right
+             */
+            $rangeRight = $totalPages - $selectedPages;
+            if($rangeRight < $range) {
+                $residue = $range - $rangeRight;
+            } else {
+                $residue = 0;
+            }
+
+            /**
+             * Range left
+             */
+            $rangeLeft = $selectedPages - ($range + $residue);
+
+            /**
+             * 
+             */
+            for($i = $selectedPages; $i > $rangeLeft; $i--) {
+                if($i == 0) {
+                    break;
+                }
+                $pages[] = $i;
+            }
+            
+            sort($pages);
+
+            /**
+             * 
+             */
+            if($selectedPages < $range) {
+                $rangeRight = $limit;
+            } else {
+                $rangeRight = $selectedPages + $range;
+            }
+
+            for($i = $selectedPages + 1; $i <= $rangeRight; $i++) {
+                if($i > $totalPages) {
+                    break;
+                }
+
+                $pages[] = $i;
+            }
+
+            $this->_pagination['range'] = $pages;
+
+            return $this->_pagination;
+        }
+
         public function getPagination() {
             if($this->_pagination) {
                 return $this->_pagination;
